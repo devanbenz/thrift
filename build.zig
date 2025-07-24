@@ -6,13 +6,13 @@ pub fn build(b: *std.Build) void {
     const optimize = b.standardOptimizeOption(.{});
 
     _ = b.addModule("thrift", .{
-        .root_source_file = b.path("src/root.zig"),
+        .root_source_file = b.path("lib/zig/src/root.zig"),
         .target = target,
     });
 
     // Add tests
     const tests = b.addTest(.{
-        .root_source_file = b.path("src/types_test.zig"),
+        .root_source_file = b.path("lib/zig/src/types_test.zig"),
         .target = target,
         .optimize = optimize,
     });
