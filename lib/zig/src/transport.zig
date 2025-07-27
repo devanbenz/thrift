@@ -5,6 +5,8 @@ pub const TransportReader = struct {
     readAllFn: *const fn (ptr: *anyopaque, buffer: []u8) anyerror!void,
     readFn: *const fn (ptr: *anyopaque, buffer: []u8, len: usize) anyerror!void,
     seekFn: *const fn (ptr: *anyopaque, pos: usize) anyerror!void,
+    openFn: *const fn (ptr: *anyopaque) anyerror!TransportReader,
+    closeFn: *const fn (ptr: *anyopaque) anyerror!void,
 
     fn readAll(self: TransportReader, buffer: []u8) !void {
         return self.readAllFn(self.ptr.?, buffer);
@@ -17,15 +19,27 @@ pub const TransportReader = struct {
     fn seek(self: TransportReader, pos: usize) !void {
         return self.seekFn(self.ptr.?, pos);
     }
+
+    fn open(self: TransportReader) !TransportReader {
+        return self.openFn(self.ptr.?);
+    }
+
+    fn close(self: TransportReader) !void {
+        return self.closeFn(self.ptr.?);
+    }
 };
 
 pub const Transport = struct {
     _reader: TransportReader,
-    _curr_byte: usize,
     const Self = @This();
 
     pub fn init(transport_reader: TransportReader) Transport {
-        return .{ ._reader = transport_reader, ._curr_byte = 0 };
+        transport_reader.open();
+        return .{ ._reader = transport_reader };
+    }
+
+    pub fn deinit(self: Self) !void {
+        return self._reader.close();
     }
 
     pub fn read_byte(self: Self, buffer: []u8) !TransportReader {
