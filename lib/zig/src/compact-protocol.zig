@@ -1,6 +1,7 @@
 const std = @import("std");
 const types = @import("types.zig");
 const transport = @import("transport.zig");
+const test_utils = @import("test_utils.zig");
 
 pub const CompactProtocol = struct {
     _ttype: types.TType,
@@ -9,14 +10,13 @@ pub const CompactProtocol = struct {
 
     const Self = @This();
 
-    pub const DEFAULT_MAX_MESSAGE_SIZE: i32 = 100 * 1024 * 1024;
-    pub const DEFAULT_MAX_FRAME_SIZE: i32 = 16384000;
+    pub const DEFAULT_MAX_MESSAGE_SIZE: usize = 100 * 1024 * 1024;
+    pub const DEFAULT_MAX_FRAME_SIZE: usize = 16384000;
     pub const DEFAULT_TBINARY_STRICT_READ: bool = false;
     pub const DEFAULT_TBINARY_STRICT_WRITE: bool = true;
 
     const MESSAGE_ID: u8 = 0x82;
 
-    const CompactMessage = struct { seq: i32, name_len: i32, name: []const u8 };
     const CompactMessageType = enum(u8) {
         Call = 1,
         Reply = 2,
@@ -24,9 +24,11 @@ pub const CompactProtocol = struct {
         Oneway = 4,
     };
 
-    pub fn init(allocator: std.mem.Allocator, stream: transport.Transport) CompactProtocol {
+    const CompactMessage = struct { seq: i32, name_len: i32, name: []const u8, type: CompactMessageType };
+
+    pub fn init(allocator: std.mem.Allocator, stream: transport.Transport) !CompactProtocol {
         const internal_buf = try allocator.alloc(u8, DEFAULT_MAX_MESSAGE_SIZE);
-        return .{ ._ttype = types.TType.init(allocator), ._stream = stream, ._buf = internal_buf };
+        return .{ ._ttype = try types.TType.init(allocator), ._stream = stream, ._buf = internal_buf };
     }
 
     fn int_to_zigzag(n: i32) i32 {
@@ -53,8 +55,17 @@ pub const CompactProtocol = struct {
         try self._stream.read(buf, len);
     }
 
-    pub fn read_message_begin(self: Self) !CompactMessage {
+    pub fn read_message_begin() !CompactMessage {
         // Read protocol ID
 
     }
 };
+
+test "test zigzag encoding and decoding" {
+    var gpa = std.heap.GeneralPurposeAllocator(.{}){};
+    const allocator = gpa.allocator();
+    var test_reader = test_utils.TestReader.init("TEST");
+    const test_transport = try transport.Transport.init(test_reader.transport_reader());
+
+    _ = try CompactProtocol.init(allocator, test_transport);
+}

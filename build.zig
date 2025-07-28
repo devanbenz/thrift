@@ -5,14 +5,14 @@ pub fn build(b: *std.Build) void {
     const target = b.standardTargetOptions(.{});
     const optimize = b.standardOptimizeOption(.{});
 
-    _ = b.addModule("thrift", .{
+    const root = b.addModule("thrift", .{
         .root_source_file = b.path("lib/zig/src/root.zig"),
         .target = target,
     });
 
     // Add tests
     const tests = b.addTest(.{
-        .root_source_file = b.path("lib/zig/src/types_test.zig"),
+        .root_module = root,
         .target = target,
         .optimize = optimize,
     });
