@@ -1,6 +1,12 @@
 const std = @import("std");
 const types = @import("types.zig");
 const transport = @import("transport.zig");
+const protocol = @import("protocol.zig");
+const Protocol = protocol.Protocol;
+const ThriftError = ThriftError;
+const FieldType = FieldType;
+const FieldInfo = FieldInfo;
+const ListInfo = ListInfo;
 
 // zigzag encoding and decoding
 fn int_to_zigzag(n: i32) i32 {
@@ -114,6 +120,225 @@ pub const CompactProtocol = struct {
 
         return CompactMessage{ .seq = seq_id, .name = name_buf, .name_len = @intCast(name_len), .type = @enumFromInt(msg_type) };
     }
+
+    // Protocol method implementations
+    pub fn writeStructBegin(ptr: *anyopaque, name: []const u8) ThriftError!void {
+        _ = ptr;
+        _ = name;
+        // TODO: Implement me!
+    }
+
+    pub fn writeStructEnd(ptr: *anyopaque) ThriftError!void {
+        _ = ptr;
+        // TODO: Implement me!
+    }
+
+    pub fn readStructBegin(ptr: *anyopaque) ThriftError![]const u8 {
+        _ = ptr;
+        // TODO: Implement me!
+        return "";
+    }
+
+    pub fn readStructEnd(ptr: *anyopaque) ThriftError!void {
+        _ = ptr;
+        // TODO: Implement me!
+    }
+
+    pub fn writeFieldBegin(ptr: *anyopaque, field_id: i16, field_type: FieldType) ThriftError!void {
+        _ = ptr;
+        _ = field_id;
+        _ = field_type;
+        // TODO: Implement me!
+    }
+
+    pub fn writeFieldEnd(ptr: *anyopaque) ThriftError!void {
+        _ = ptr;
+        // TODO: Implement me!
+    }
+
+    pub fn writeFieldStop(ptr: *anyopaque) ThriftError!void {
+        _ = ptr;
+        // TODO: Implement me!
+    }
+
+    pub fn readFieldBegin(ptr: *anyopaque) ThriftError!FieldInfo {
+        _ = ptr;
+        // TODO: Implement me!
+        return FieldInfo{
+            .name = "",
+            .field_type = FieldType.BOOL,
+            .field_id = 0,
+        };
+    }
+
+    pub fn readFieldEnd(ptr: *anyopaque) ThriftError!void {
+        _ = ptr;
+        // TODO: Implement me!
+    }
+
+    pub fn writeListBegin(ptr: *anyopaque, element_type: FieldType, size: usize) ThriftError!void {
+        _ = ptr;
+        _ = element_type;
+        _ = size;
+        // TODO: Implement me!
+    }
+
+    pub fn writeListEnd(ptr: *anyopaque) ThriftError!void {
+        _ = ptr;
+        // TODO: Implement me!
+    }
+
+    pub fn readListBegin(ptr: *anyopaque) ThriftError!ListInfo {
+        _ = ptr;
+        // TODO: Implement me!
+        return ListInfo{
+            .element_type = FieldType.BOOL,
+            .size = 0,
+        };
+    }
+
+    pub fn readListEnd(ptr: *anyopaque) ThriftError!void {
+        _ = ptr;
+        // TODO: Implement me!
+    }
+
+    pub fn writeBool(ptr: *anyopaque, value: bool) ThriftError!void {
+        _ = ptr;
+        _ = value;
+        // TODO: Implement me!
+    }
+
+    pub fn writeI8(ptr: *anyopaque, value: i8) ThriftError!void {
+        _ = ptr;
+        _ = value;
+        // TODO: Implement me!
+    }
+
+    pub fn writeI16(ptr: *anyopaque, value: i16) ThriftError!void {
+        _ = ptr;
+        _ = value;
+        // TODO: Implement me!
+    }
+
+    pub fn writeI32(ptr: *anyopaque, value: i32) ThriftError!void {
+        _ = ptr;
+        _ = value;
+        // TODO: Implement me!
+    }
+
+    pub fn writeI64(ptr: *anyopaque, value: i64) ThriftError!void {
+        _ = ptr;
+        _ = value;
+        // TODO: Implement me!
+    }
+
+    pub fn writeDouble(ptr: *anyopaque, value: f64) ThriftError!void {
+        _ = ptr;
+        _ = value;
+        // TODO: Implement me!
+    }
+
+    pub fn writeString(ptr: *anyopaque, value: []const u8) ThriftError!void {
+        _ = ptr;
+        _ = value;
+        // TODO: Implement me!
+    }
+
+    pub fn writeBinary(ptr: *anyopaque, value: []const u8) ThriftError!void {
+        _ = ptr;
+        _ = value;
+        // TODO: Implement me!
+    }
+
+    pub fn readBool(ptr: *anyopaque) ThriftError!bool {
+        _ = ptr;
+        // TODO: Implement me!
+        return false;
+    }
+
+    pub fn readI8(ptr: *anyopaque) ThriftError!i8 {
+        _ = ptr;
+        // TODO: Implement me!
+        return 0;
+    }
+
+    pub fn readI16(ptr: *anyopaque) ThriftError!i16 {
+        _ = ptr;
+        // TODO: Implement me!
+        return 0;
+    }
+
+    pub fn readI32(ptr: *anyopaque) ThriftError!i32 {
+        _ = ptr;
+        // TODO: Implement me!
+        return 0;
+    }
+
+    pub fn readI64(ptr: *anyopaque) ThriftError!i64 {
+        _ = ptr;
+        // TODO: Implement me!
+        return 0;
+    }
+
+    pub fn readDouble(ptr: *anyopaque) ThriftError!f64 {
+        _ = ptr;
+        // TODO: Implement me!
+        return 0.0;
+    }
+
+    pub fn readString(ptr: *anyopaque, allocator: std.mem.Allocator) ThriftError![]u8 {
+        _ = ptr;
+        // TODO: Implement me!
+        return try allocator.alloc(u8, 0);
+    }
+
+    pub fn readBinary(ptr: *anyopaque, allocator: std.mem.Allocator) ThriftError![]u8 {
+        _ = ptr;
+        // TODO: Implement me!
+        return try allocator.alloc(u8, 0);
+    }
+
+    pub fn skip(ptr: *anyopaque, field_type: FieldType) ThriftError!void {
+        _ = ptr;
+        _ = field_type;
+        // TODO: Implement me!
+    }
+
+    pub fn protocol(self: *Self) Protocol {
+        return Protocol{
+            .ptr = self,
+            .writeStructBeginFn = writeStructBegin,
+            .writeStructEndFn = writeStructEnd,
+            .readStructBeginFn = readStructBegin,
+            .readStructEndFn = readStructEnd,
+            .writeFieldBeginFn = writeFieldBegin,
+            .writeFieldEndFn = writeFieldEnd,
+            .writeFieldStopFn = writeFieldStop,
+            .readFieldBeginFn = readFieldBegin,
+            .readFieldEndFn = readFieldEnd,
+            .writeListBeginFn = writeListBegin,
+            .writeListEndFn = writeListEnd,
+            .readListBeginFn = readListBegin,
+            .readListEndFn = readListEnd,
+            .writeBoolFn = writeBool,
+            .writeI8Fn = writeI8,
+            .writeI16Fn = writeI16,
+            .writeI32Fn = writeI32,
+            .writeI64Fn = writeI64,
+            .writeDoubleFn = writeDouble,
+            .writeStringFn = writeString,
+            .writeBinaryFn = writeBinary,
+            .readBoolFn = readBool,
+            .readI8Fn = readI8,
+            .readI16Fn = readI16,
+            .readI32Fn = readI32,
+            .readI64Fn = readI64,
+            .readDoubleFn = readDouble,
+            .readStringFn = readString,
+            .readBinaryFn = readBinary,
+            .skipFn = skip,
+        };
+    }
 };
 
 test "test zigzag encoding and decoding" {
@@ -127,229 +352,3 @@ test "test zigzag encoding and decoding" {
     const out_decoded_64 = zigzag_to_long(@as(i64, 39));
     try std.testing.expect(out_decoded_64 == -20);
 }
-
-// TODO: Stub this out for compact_protocol
-
-pub const ThriftError = error{
-    ProtocolError,
-    OutOfMemory,
-    InvalidData,
-    UnexpectedEof,
-};
-
-pub const FieldType = enum(u8) {
-    BOOL = 2,
-    I8 = 3,
-    DOUBLE = 4,
-    I16 = 6,
-    I32 = 8,
-    I64 = 10,
-    STRING = 11,
-    STRUCT = 12,
-    MAP = 13,
-    SET = 14,
-    LIST = 15,
-};
-
-pub const FieldInfo = struct {
-    name: []const u8,
-    field_type: FieldType,
-    field_id: i16,
-};
-
-pub const ListInfo = struct {
-    element_type: FieldType,
-    size: u32,
-};
-
-pub const Protocol = struct {
-    const Self = @This();
-
-    // Structure operations
-    pub fn writeStructBegin(self: *Self, name: []const u8) ThriftError!void {
-        _ = self;
-        _ = name;
-        // Implementation would go here
-    }
-
-    pub fn writeStructEnd(self: *Self) ThriftError!void {
-        _ = self;
-        // Implementation would go here
-    }
-
-    pub fn readStructBegin(self: *Self) ThriftError![]const u8 {
-        _ = self;
-        // Implementation would go here
-        return "";
-    }
-
-    pub fn readStructEnd(self: *Self) ThriftError!void {
-        _ = self;
-        // Implementation would go here
-    }
-
-    // Field operations
-    pub fn writeFieldBegin(self: *Self, field_id: i16, field_type: FieldType) ThriftError!void {
-        _ = self;
-        _ = field_id;
-        _ = field_type;
-        // Implementation would go here
-    }
-
-    pub fn writeFieldEnd(self: *Self) ThriftError!void {
-        _ = self;
-        // Implementation would go here
-    }
-
-    pub fn writeFieldStop(self: *Self) ThriftError!void {
-        _ = self;
-        // Implementation would go here
-    }
-
-    pub fn readFieldBegin(self: *Self) ThriftError!FieldInfo {
-        _ = self;
-        // Implementation would go here
-        return FieldInfo{
-            .name = "",
-            .field_type = FieldType.BOOL,
-            .field_id = 0,
-        };
-    }
-
-    pub fn readFieldEnd(self: *Self) ThriftError!void {
-        _ = self;
-        // Implementation would go here
-    }
-
-    // List operations
-    pub fn writeListBegin(self: *Self, element_type: FieldType, size: usize) ThriftError!void {
-        _ = self;
-        _ = element_type;
-        _ = size;
-        // Implementation would go here
-    }
-
-    pub fn writeListEnd(self: *Self) ThriftError!void {
-        _ = self;
-        // Implementation would go here
-    }
-
-    pub fn readListBegin(self: *Self) ThriftError!ListInfo {
-        _ = self;
-        // Implementation would go here
-        return ListInfo{
-            .element_type = FieldType.BOOL,
-            .size = 0,
-        };
-    }
-
-    pub fn readListEnd(self: *Self) ThriftError!void {
-        _ = self;
-        // Implementation would go here
-    }
-
-    // Write primitive types
-    pub fn writeBool(self: *Self, value: bool) ThriftError!void {
-        _ = self;
-        _ = value;
-        // Implementation would go here
-    }
-
-    pub fn writeI8(self: *Self, value: i8) ThriftError!void {
-        _ = self;
-        _ = value;
-        // Implementation would go here
-    }
-
-    pub fn writeI16(self: *Self, value: i16) ThriftError!void {
-        _ = self;
-        _ = value;
-        // Implementation would go here
-    }
-
-    pub fn writeI32(self: *Self, value: i32) ThriftError!void {
-        _ = self;
-        _ = value;
-        // Implementation would go here
-    }
-
-    pub fn writeI64(self: *Self, value: i64) ThriftError!void {
-        _ = self;
-        _ = value;
-        // Implementation would go here
-    }
-
-    pub fn writeDouble(self: *Self, value: f64) ThriftError!void {
-        _ = self;
-        _ = value;
-        // Implementation would go here
-    }
-
-    pub fn writeString(self: *Self, value: []const u8) ThriftError!void {
-        _ = self;
-        _ = value;
-        // Implementation would go here
-    }
-
-    pub fn writeBinary(self: *Self, value: []const u8) ThriftError!void {
-        _ = self;
-        _ = value;
-        // Implementation would go here
-    }
-
-    // Read primitive types
-    pub fn readBool(self: *Self) ThriftError!bool {
-        _ = self;
-        // Implementation would go here
-        return false;
-    }
-
-    pub fn readI8(self: *Self) ThriftError!i8 {
-        _ = self;
-        // Implementation would go here
-        return 0;
-    }
-
-    pub fn readI16(self: *Self) ThriftError!i16 {
-        _ = self;
-        // Implementation would go here
-        return 0;
-    }
-
-    pub fn readI32(self: *Self) ThriftError!i32 {
-        _ = self;
-        // Implementation would go here
-        return 0;
-    }
-
-    pub fn readI64(self: *Self) ThriftError!i64 {
-        _ = self;
-        // Implementation would go here
-        return 0;
-    }
-
-    pub fn readDouble(self: *Self) ThriftError!f64 {
-        _ = self;
-        // Implementation would go here
-        return 0.0;
-    }
-
-    pub fn readString(self: *Self, allocator: Allocator) ThriftError![]u8 {
-        _ = self;
-        // Implementation would go here
-        return try allocator.alloc(u8, 0);
-    }
-
-    pub fn readBinary(self: *Self, allocator: Allocator) ThriftError![]u8 {
-        _ = self;
-        // Implementation would go here
-        return try allocator.alloc(u8, 0);
-    }
-
-    // Skip operation for unknown fields
-    pub fn skip(self: *Self, field_type: FieldType) ThriftError!void {
-        _ = self;
-        _ = field_type;
-        // Implementation would go here
-    }
-};
